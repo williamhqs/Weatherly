@@ -61,3 +61,8 @@ https://www.swift.org/documentation/api-design-guidelines/
 1. 项目使用github actions来实现CI&CD。
 2. 每次push到develop分支，会自动触发构建和测试。
 3. 如果构建和测试通过，会自动部署到测试环境。（这里自动通知等暂不实现）
+
+# workflow
+- 单人开发，使用Githubflow，不采用gitflow
+- `main` 分支始终保持可以编译测试通过。
+- 一个分支开发一个功能，开发完成后合并到`main`分支命名使用`feature/`、`fix/`等前缀。
