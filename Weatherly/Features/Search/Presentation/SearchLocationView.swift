@@ -39,7 +39,7 @@ struct SearchLocationView: View {
                 Button {
                     onSelect(location)
                 } label: {
-                    row(for: location)
+                    LocationRow(location: location)
                 }
             }
         case .failed(let error):
@@ -47,27 +47,5 @@ struct SearchLocationView: View {
                 Task { await viewModel.searchNow() }
             }
         }
-    }
-    
-    private func row(for location: Location) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(location.name)
-                .foregroundStyle(.primary)
-            if let subtitle = subtitle(for: location) {
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(Rectangle())
-    }
-    
-    private func subtitle(for location: Location) -> String? {
-        let parts = [location.region, location.country]
-            .compactMap { $0 }
-            .filter { !$0.isEmpty && $0 != location.name }
-        
-        return parts.isEmpty ? nil : parts.joined(separator: ", ")
     }
 }
