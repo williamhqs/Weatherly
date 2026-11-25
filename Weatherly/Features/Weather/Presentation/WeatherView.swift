@@ -12,9 +12,11 @@ struct WeatherView: View {
     let viewModel: WeatherViewModel
     
     var body: some View {
-        content.task {
-            await viewModel.load()
-        }
+        content
+            .navigationTitle(viewModel.location.name)
+            .task(id: viewModel.location.id) {
+                await viewModel.load()
+            }
     }
     
     @ViewBuilder

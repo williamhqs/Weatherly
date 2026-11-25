@@ -43,7 +43,6 @@ struct URLSessionHTTPClient: HTTPClient {
                     Response.self,
                     from: data
                 )
-                print("response", response)
                 return response
             } catch {
                 throw AppError.decoding
