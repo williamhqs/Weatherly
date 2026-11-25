@@ -5,6 +5,23 @@
 //  Created by Hu Qiushi on 2026/11/25.
 //
 
-struct Weather {
-    
+import Foundation
+
+struct Weather: Equatable {
+    let current: CurrentWeather
+        let daily: [DailyForecast]
+        let timeZoneIdentifier: String
+}
+
+struct CurrentWeather: Equatable {
+    let time: Date
+    let temperature: Double
+    let condition: WeatherCondition
+}
+
+struct DailyForecast: Equatable {
+    let date: Date
+    let minTemperature: Double
+    let maxTemperature: Double
+    let condition: WeatherCondition
 }
