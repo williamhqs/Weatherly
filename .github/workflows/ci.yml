@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: xcode-27
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test (macOS)
+        run: |
+          xcodebuild test \
+            -project Weatherly.xcodeproj \
+            -scheme Weatherly \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Build (iOS Simulator)
+        run: |
+          xcodebuild build \
+            -project Weatherly.xcodeproj \
+            -scheme Weatherly \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
