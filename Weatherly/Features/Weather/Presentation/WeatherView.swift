@@ -21,59 +21,11 @@ struct WeatherView: View {
     private var content: some View {
         switch viewModel.fetchWeatherState {
         case .idle:
-            Color.red
+            Color.clear
         case .loading:
             ProgressView("Loading weather…")
         case .loaded(let weather):
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Current Weather")
-                            .font(.headline)
-                        Image(
-                            systemName: weather.current.condition.systemImage
-                        )
-                        .font(.largeTitle)
-                        Text(
-                            String(
-                                format: "%.1f °C",
-                                weather.current.temperature
-                            )
-                        )
-                        .font(.largeTitle)
-                        
-                        Text(weather.current.condition.title)
-                            .foregroundStyle(.secondary)
-                        
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("7-Day Forecast")
-                            .font(.headline)
-                        
-                        ForEach(weather.daily, id: \.date) { day in
-                            HStack {
-                                Text(
-                                    formattedDay(
-                                        day.date,
-                                        timeZoneIdentifier: weather.timeZoneIdentifier
-                                    )
-                                )
-                                
-                                Spacer()
-                                
-                                Image(systemName: day.condition.systemImage)
-                                
-                                Text(
-                                    "\(Int(day.minTemperature.rounded()))° / \(Int(day.maxTemperature.rounded()))°"
-                                )
-                                .monospacedDigit()
-                            }
-                        }
-                    }
-                }
-            }
-            .padding()
+            WeatherContentView(weather: weather)
         case .failed(let appError):
             WeatherErrorView(error: appError) {
                 Task {
@@ -84,55 +36,7 @@ struct WeatherView: View {
     }
 }
 
-private func formattedDay(
-    _ date: Date,
-    timeZoneIdentifier: String
-) -> String {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.timeZone = TimeZone(
-        identifier: timeZoneIdentifier
-    )
-    formatter.dateFormat = "E, MMM d"
-    return formatter.string(from: date)
-}
-
-
-
-
-private extension WeatherCondition {
-    var title: String {
-        switch self {
-        case .clear: return "Clear"
-        case .partlyCloudy: return "Partly Cloudy"
-        case .cloudy: return "Cloudy"
-        case .fog: return "Fog"
-        case .drizzle: return "Drizzle"
-        case .rain: return "Rain"
-        case .snow: return "Snow"
-        case .thunderstorm: return "Thunderstorm"
-        case .unknown: return "Unknown"
-        }
-    }
-    
-    var systemImage: String {
-        switch self {
-        case .clear: return "sun.max"
-        case .partlyCloudy: return "cloud.sun"
-        case .cloudy: return "cloud"
-        case .fog: return "cloud.fog"
-        case .drizzle: return "cloud.drizzle"
-        case .rain: return "cloud.rain"
-        case .snow: return "snow"
-        case .thunderstorm: return "cloud.bolt.rain"
-        case .unknown: return "questionmark.circle"
-        }
-    }
-}
-
-
 #if DEBUG
-import SwiftUI
 
 private struct PreviewWeatherRepository: WeatherRepository {
     var result: Result<Weather, AppError> = .success(.preview)

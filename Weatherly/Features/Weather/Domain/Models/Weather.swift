@@ -25,15 +25,3 @@ struct DailyForecast: Equatable {
     let maxTemperature: Double
     let condition: WeatherCondition
 }
-
-enum WeatherCondition: Equatable {
-    case clear
-    case partlyCloudy
-    case cloudy
-    case fog
-    case drizzle
-    case rain
-    case snow
-    case thunderstorm
-    case unknown
-}
