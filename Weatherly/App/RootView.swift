@@ -35,6 +35,7 @@ struct RootView: View {
                             )
                             isSearching = false
                         }
+                        .modifier(SearchSheetSizing())
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Cancel") {
@@ -48,4 +49,19 @@ struct RootView: View {
     }
 }
 
-
+private struct SearchSheetSizing: ViewModifier {
+    func body(content: Content) -> some View {
+        #if os(macOS)
+        content
+            .frame(
+                minWidth: 420,
+                idealWidth: 460,
+                minHeight: 360,
+                idealHeight: 460,
+                maxHeight: 620
+            )
+        #else
+        content
+        #endif
+    }
+}
