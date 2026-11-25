@@ -20,4 +20,12 @@ final class AppContainer {
     func makeWeatherViewModel(for location: Location) -> WeatherViewModel {
         WeatherViewModel(location: location, fetchWeatherUseCase: FetchWeatherUseCase(repository: OpenMeteoWeatherRepository(client: httpClient)))
     }
+    
+    func makeSearchLocationViewModel() -> SearchLocationViewModel {
+        SearchLocationViewModel(
+            searchUseCase: SearchLocationUseCase(
+                repository: OpenMeteoLocationRepository(client: httpClient)
+            )
+        )
+    }
 }

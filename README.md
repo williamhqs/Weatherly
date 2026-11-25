@@ -7,11 +7,11 @@ swift + swiftUI + MVVM + Clean Architecture
 ## 环境与支持
 
 | 项目       | 信息                |
-| -------- | ----------------- |
-| 支持平台     | iPhone、iPad、macOS |
-| Swift 版本 | Swift 5.9+        |
-| 最低 iOS   | 17.0              |
-| 最低 macOS | 14.0              |
+| ---------- | ------------------- |
+| 支持平台   | iPhone、iPad、macOS |
+| Swift 版本 | Swift 5        |
+| 最低 iOS   | 17.0                |
+| 最低 macOS | 14.0                |
 
 ## Code style guideline
 
@@ -102,3 +102,7 @@ Features: Presentation ──▶ Domain ◀── Data
 - Domain 不依赖 UIKit / SwiftUI / URLSession，也不依赖 Data
 - 协议在 Domain，实现在 Data，由 AppContainer 注入
 - MVVM 是界面层的架构，View 依赖 ViewModel，ViewModel 依赖 Domain，Domain 依赖 Data
+
+# 说明
+
+- 单元测试：目前提供 ForecastMapper 的测试作为示例，ViewModel / Repository 的测试待补充。

@@ -13,50 +13,15 @@ struct WeatherContentView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Current Weather").font(.headline)
-                    Image(systemName: weather.current.condition.systemImage)
-                        .font(.largeTitle)
-                    Text(String(format: "%.1f °C", weather.current.temperature))
-                        .font(.largeTitle)
-                    Text(weather.current.condition.title)
-                        .foregroundStyle(.secondary)
-                }
+                CurrentWeatherSection(current: weather.current)
                 
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("7-Day Forecast").font(.headline)
-                    ForEach(weather.daily, id: \.date) { day in
-                        HStack {
-                            Text(
-                                formattedDay(
-                                    day.date,
-                                    timeZoneIdentifier: weather.timeZoneIdentifier
-                                )
-                            )
-                            Spacer()
-                            Image(systemName: day.condition.systemImage)
-                            Text("\(Int(day.minTemperature.rounded()))° / \(Int(day.maxTemperature.rounded()))°")
-                                .monospacedDigit()
-                        }
-                    }
-                }
+                DailyForecastSection(
+                    daily: weather.daily,
+                    timeZoneIdentifier: weather.timeZoneIdentifier
+                )
             }
             .padding()
         }
-    }
-    
-    private func formattedDay(
-        _ date: Date,
-        timeZoneIdentifier: String
-    ) -> String {
-        var style = Date.FormatStyle()
-            .weekday(.abbreviated)
-            .month(.abbreviated)
-            .day()
-        
-        style.timeZone = TimeZone(identifier: timeZoneIdentifier) ?? .current
-        
-        return date.formatted(style)
     }
 }
 
