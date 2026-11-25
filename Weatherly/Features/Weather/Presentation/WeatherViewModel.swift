@@ -28,8 +28,10 @@ final class WeatherViewModel {
         do {
             let weather = try await fetchWeatherUseCase.execute(for: location)
             fetchWeatherState = .loaded(weather)
+        } catch let error as AppError {
+            fetchWeatherState = .failed(error)
         } catch {
-            
+            fetchWeatherState = .failed(.unknown)
         }
     }
 }
