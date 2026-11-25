@@ -6,8 +6,15 @@
 //
 
 import SwiftUI
+
 struct WeatherView: View {
+    
+    let viewModel: WeatherViewModel
+    
     var body: some View {
         Text("Weather View")
+            .task {
+                await viewModel.load()
+            }
     }
 }
