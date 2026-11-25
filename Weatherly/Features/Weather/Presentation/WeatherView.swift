@@ -75,17 +75,11 @@ struct WeatherView: View {
             }
             .padding()
         case .failed(let appError):
-            VStack(spacing: 12) {
-                Text(appError.message)
-                    .multilineTextAlignment(.center)
-                
-                Button("Retry") {
-                    Task {
-                        await viewModel.load()
-                    }
+            WeatherErrorView(error: appError) {
+                Task {
+                    await viewModel.load()
                 }
             }
-            .padding()
         }
     }
 }
@@ -103,22 +97,7 @@ private func formattedDay(
     return formatter.string(from: date)
 }
 
-private extension AppError {
-    var message: String {
-        switch self {
-        case .offline:
-            return "No internet connection."
-        case .timeout:
-            return "The request timed out."
-        case .server(let statusCode):
-            return "Server error: \(statusCode)."
-        case .decoding:
-            return "The weather data could not be read."
-        case .unknown:
-            return "Something went wrong."
-        }
-    }
-}
+
 
 
 private extension WeatherCondition {
