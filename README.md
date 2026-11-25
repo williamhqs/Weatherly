@@ -2,7 +2,7 @@
 
 swift + swiftUI + MVVM + Clean Architecture
 
-对于现在这个项目来说，可以使用layer First的架构，其实可以，也比较简单。但是考虑到长期发展，以及业务增多的可能性，维持边界感和多团队宾兴。这里使用feature first架构。
+对于现在这个项目来说，可以使用layer First的架构，其实可以，也比较简单。但考虑到长期发展，以及业务增多的可能性，这里使用feature first的架构，这样也方便以后的团队合作。
 
 ## 环境与支持
 
@@ -63,6 +63,43 @@ https://www.swift.org/documentation/api-design-guidelines/
 3. 如果构建和测试通过，会自动部署到测试环境。（这里自动通知等暂不实现）
 
 # workflow
+
 - 单人开发，使用Githubflow，不采用gitflow
 - `main` 分支始终保持可以编译测试通过。
 - 一个分支开发一个功能，开发完成后合并到`main`分支命名使用`feature/`、`fix/`等前缀。
+
+# 主要目录结构
+
+```text
+Weatherly/
+├── App/
+│   ├── WeatherlyApp.swift          # 入口
+│   ├── RootView.swift              # 临时根视图，后续由路由取代
+│   └── AppContainer.swift          # 唯一依赖装配点
+├── Features/
+│   ├── Search/
+│   │   ├── Presentation/           # SearchLocationView / ViewModel
+│   │   ├── Domain/                 # LocationRepository 协议、SearchLocationsUseCase
+│   │   └── Data/                   # GeocodingDTO / Mapper / RepositoryImpl
+│   └── Weather/
+│       ├── Presentation/           # WeatherView / ViewModel / Components
+│       ├── Domain/                 # Weather 模型、WeatherRepository 协议、FetchWeatherUseCase
+│       └── Data/                   # ForecastDTO / Mapper / RepositoryImpl
+├── Core/
+│   ├── Networking/                 # Endpoint / HTTPMethod / HTTPClient（URLSession 实现后续加入）
+│   ├── Domain/                     # Location / AppError
+│   └── UI/                         # ViewState
+└── WeatherlyTests/
+```
+
+### 依赖规则
+
+App ──▶ Features ──▶ Core
+
+Features: Presentation ──▶ Domain ◀── Data
+
+
+- Feature 之间禁止互相引用，共享类型放 Core，由 App 层串联
+- Domain 不依赖 UIKit / SwiftUI / URLSession，也不依赖 Data
+- 协议在 Domain，实现在 Data，由 AppContainer 注入
+- MVVM 是界面层的架构，View 依赖 ViewModel，ViewModel 依赖 Domain，Domain 依赖 Data
