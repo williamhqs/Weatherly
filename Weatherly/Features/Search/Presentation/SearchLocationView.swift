@@ -43,18 +43,9 @@ struct SearchLocationView: View {
                 }
             }
         case .failed(let error):
-            VStack(spacing: 16) {
-                Text(error.message)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-                
-                Button("Retry") {
-                    Task { await viewModel.searchNow() }
-                }
-                .buttonStyle(.borderedProminent)
+            ErrorStateView(message: error.message) {
+                Task { await viewModel.searchNow() }
             }
-            .padding(24)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
     

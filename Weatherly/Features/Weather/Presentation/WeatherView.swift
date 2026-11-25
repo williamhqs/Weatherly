@@ -29,7 +29,7 @@ struct WeatherView: View {
         case .loaded(let weather):
             WeatherContentView(weather: weather)
         case .failed(let appError):
-            WeatherErrorView(error: appError) {
+            ErrorStateView(message: appError.message) {
                 Task {
                     await viewModel.load()
                 }
